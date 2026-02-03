@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { LayoutDashboard, Settings, Cpu, Activity, Power, LogOut, Monitor, Shield, Users, ShieldBan, Volume2, Heart, Share2, Beaker, Sparkles } from 'lucide-react'
+import { LayoutDashboard, Settings, Cpu, Activity, Power, LogOut, Monitor, Shield, Users, ShieldBan, Volume2, Heart, Share2, Beaker, Sparkles, DollarSign } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Dashboard from './pages/Dashboard'
 import Orchestrator from './pages/Orchestrator'
