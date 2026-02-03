@@ -59,10 +59,11 @@ function App() {
     try {
       setError(null)
       const res = await axios.get(`${API_URL}/config`)
-      if (res.data) {
+      if (res.data && typeof res.data === 'object' && res.data.youtube) {
         setConfig(res.data)
       } else {
-        throw new Error("Empty response from server")
+        console.error("Invalid Config:", res.data)
+        throw new Error("Invalid configuration received (Not JSON)")
       }
     } catch (e) {
       console.error("Config Load Error", e)
@@ -97,13 +98,18 @@ function App() {
 
   if (window.location.search.includes('mode=pay')) return <PaymentPage />
 
-  if (!config) return (
+  // Safety check for config integrity
+  const isValidConfig = config && typeof config === 'object' && config.youtube;
+
+  if (!isValidConfig) return (
     <div className="flex flex-col h-screen items-center justify-center bg-zinc-950 text-white gap-4">
       {error ? (
         <>
           <div className="text-rose-500 font-bold text-xl">Connection Error</div>
-          <div className="text-zinc-400 font-mono text-sm bg-zinc-900 p-4 rounded-lg border border-white/5">{error}</div>
-          <button onClick={fetchConfig} className="px-4 py-2 bg-primary rounded-lg text-sm font-bold">Retry Connection</button>
+          <div className="text-zinc-400 font-mono text-sm bg-zinc-900 p-4 rounded-lg border border-white/5 max-w-lg overflow-auto">
+            {typeof error === 'string' ? error : JSON.stringify(error)}
+          </div>
+          <button onClick={fetchConfig} className="px-4 py-2 bg-primary rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors">Retry Connection</button>
         </>
       ) : (
         <>
@@ -161,7 +167,7 @@ function App() {
           <h1 className="font-bold text-2xl capitalize text-gray-800 tracking-tight">{activeTab}</h1>
           <div className="flex items-center gap-4">
             <div className="text-sm font-medium text-muted-foreground bg-muted px-3 py-1.5 rounded-full border">
-              Video ID: <span className="text-foreground">{config.youtube.video_id || "Not Configured"}</span>
+              Video ID: <span className="text-foreground">{config?.youtube?.video_id || "Not Configured"}</span>
             </div>
             <div className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
               PI

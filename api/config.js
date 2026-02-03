@@ -1,4 +1,5 @@
 export default function handler(req, res) {
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).json({
         youtube: { video_id: "" },
         streamer_bot: { enabled: false, host: "127.0.0.1", port: 8080 },
